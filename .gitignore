@@ -2,3 +2,5 @@
 .libs
 ultipoly
 .~lock*
+
+*.log
