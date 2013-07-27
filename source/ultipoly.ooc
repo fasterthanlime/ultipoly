@@ -14,15 +14,16 @@ import gnaar/[ui, dialogs]
 
 // sdk
 import structs/[ArrayList]
-import io/File
+
+// ours
+use ultipoly-server
+import ulti/[base, board]
 
 main: func (args: ArrayList<String>) {
     Game new()
 }
 
-Game: class {
-
-    logger: Logger
+Game: class extends Base {
 
     dye: DyeContext
     input: Input
@@ -32,7 +33,7 @@ Game: class {
     frame: Frame
 
     init: func {
-        initLogging()
+        super()
         logger info("Starting up ultipoly...")
 
         configPath := "config/ultipoly.config"
@@ -75,28 +76,6 @@ Game: class {
     quit: func {
         dye quit()
         exit(0)
-    }
-
-    initLogging: func {
-        // log to console
-        console := StdoutHandler new()
-        formatter := NiceFormatter new()
-        version (!windows) {
-            formatter = ColoredFormatter new(formatter)
-        }
-        console setFormatter(formatter)
-        //console setFilter(LevelFilter new(Level info..Level critical))
-        Log root attachHandler(console)
-
-        // log to file
-        logFile := File new("ultipoly.log")
-        logFile write("")
-
-        file := FileHandler new(logFile path)
-        file setFormatter(NiceFormatter new())
-        Log root attachHandler(file)
-
-        logger = Log getLogger("Ultipoly")
     }
 
 }
