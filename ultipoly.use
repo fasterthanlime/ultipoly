@@ -1,5 +1,5 @@
 Name: ultipoly
 Description: real-time monopoly
-Requires: dye, ultipoly-server, deadlogger, zombieconfig
+Requires: dye, deadlogger, zombieconfig
 SourcePath: source
 Main: ultipoly
