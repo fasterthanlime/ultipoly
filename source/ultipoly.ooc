@@ -10,7 +10,7 @@ use dye
 import dye/[core, input, sprite, primitives, loop]
 
 use gnaar
-import gnaar/[ui, dialogs]
+import gnaar/[ui, ui-loader, dialogs]
 
 // sdk
 import structs/[ArrayList]
@@ -34,6 +34,8 @@ Client: class extends Base {
     scene: Scene
     frame: Frame
 
+    player: Player
+
     init: func {
         super()
         logger info("Starting up ultipoly...")
@@ -50,16 +52,33 @@ Client: class extends Base {
         title := "Ultipoly"
 
         dye = DyeContext new(width, height, title, false)
+        dye setClearColor(Color new(50, 50, 50))
         input = dye input
         scene = dye getScene()
         frame = Frame new(scene)
 
         loop = FixedLoop new(dye, 30)
 
+        /*
         dialog := InputDialog new(frame, "Nickname", |message|
             logger info("Got message: %s", message)
         )
         frame push(dialog)
+        */
+
+        player = Player new("me")
+
+        uiLoader := UILoader new(UIFactory new())
+        uiLoader load(frame, "assets/ui/topbar.yml")
+        
+        /*
+        panel := Panel new()
+        panel width = SizeFlavor PERCENTAGE
+        panel height = SizeFlavor PERCENTAGE
+        panel givenSize set!(100, 50)
+        panel setBackgroundColor(Color new(128, 0, 0)) 
+        frame add(panel)
+        */
 
         board := Board new()
         pboard := PBoard new(board)

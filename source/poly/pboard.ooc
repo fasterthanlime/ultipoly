@@ -21,7 +21,7 @@ PBoard: class extends GlGroup {
     ptiles := ArrayList<PTile> new()
 
     init: func (=board) {
-        add(GlText new(FONT_PATH, "%d tiles missing here." format(board tiles size)))
+        //add(GlText new(FONT_PATH, "%d tiles missing here." format(board tiles size)))
 
         x := 100
         y := 100
