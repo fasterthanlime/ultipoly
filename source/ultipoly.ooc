@@ -18,7 +18,7 @@ import os/Time
 
 // ours
 use ultipoly-server
-import ulti/[base, board]
+import ulti/[base, board, net]
 
 import poly/[pboard]
 
@@ -33,7 +33,6 @@ Client: class extends Base {
     loop: FixedLoop
 
     scene: Scene
-    frame: Frame
 
     player: Player
     board: Board
@@ -41,6 +40,16 @@ Client: class extends Base {
 
     // temp code
     steps := 0
+
+    // ui
+    frame: Frame
+    time, money: Label
+
+    // net
+    net: ClientNet
+
+    // state
+    state := ClientState WAITING
 
     init: func {
         super()
@@ -51,6 +60,7 @@ Client: class extends Base {
             base("width", "1024")
             base("height", "768")
             base("server", "ultipoly.amos.me")
+            base("port", "5555")
         )
 
         width  := config["width"]  toInt()
@@ -61,63 +71,69 @@ Client: class extends Base {
         dye setClearColor(Color new(50, 50, 50))
         input = dye input
         scene = dye getScene()
+
         frame = Frame new(scene)
 
         setupEvents()
 
-        loop = FixedLoop new(dye, 60)
-
-        /*
         dialog := InputDialog new(frame, "Nickname", |message|
-            logger info("Got message: %s", message)
+            logger info("Joining with nick '%s'", message)
+            net join(message)
+            joined()
         )
         frame push(dialog)
-        */
 
         player = Player new("me")
 
-        uiLoader := UILoader new(UIFactory new())
-        uiLoader load(frame, "assets/ui/main.yml")
-        time := frame find("time", Label)
-        money := frame find("money", Label)
-        
-        right := frame find("right", Panel)
-        uiLoader load(right, "assets/ui/street.yml")
+        loadUI()
 
+        net = ClientNet new()
+        net connect("tcp://%s:%s" format(config["server"], config["port"]))
+
+        loop = FixedLoop new(dye, 60)
+        loop run(||
+            frame update()
+            update()
+        )
+    }
+
+    joined: func {
         board = Board new()
+        board classicSetup()
         pboard = PBoard new(board)
         scene add(pboard)
 
         unit := board createUnit(player)
         pboard addUnit(unit)
 
-        loop run(||
-            time setValue("%d seconds" format(this steps))
-            money setValue("$%.0f" format(player balance))
-
-            frame update()
-            update()
-        )
+        state = ClientState IN_GAME
     }
 
-    advance: func {
-        steps += 1
-        for (unit in player units) {
-            unit step(1000)
-        }
+    loadUI: func {
+        uiLoader := UILoader new(UIFactory new())
+        uiLoader load(frame, "assets/ui/main.yml")
+        time = frame find("time", Label)
+        money = frame find("money", Label)
+        
+        right := frame find("right", Panel)
+        uiLoader load(right, "assets/ui/street.yml")
+
     }
 
     update: func {
-        pboard update()
+        net update()
+
+        match state {
+            case ClientState IN_GAME =>
+                pboard update()
+                time setValue("%d seconds" format(this steps))
+                money setValue("$%.0f" format(player balance))
+        }
     }
 
     setupEvents: func {
         input onKeyPress(KeyCode ESC, |kp|
             quit()
-        )
-
-        input onKeyPress(KeyCode SPACE, |kp|
-            advance()
         )
 
         input onExit(|| quit())
@@ -129,3 +145,9 @@ Client: class extends Base {
     }
 
 }
+
+ClientState: enum {
+    WAITING
+    IN_GAME
+}
+
