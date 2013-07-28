@@ -87,7 +87,7 @@ Client: class extends Base {
         loadUI()
 
         net = ClientNetImpl new(this)
-        net connect("tcp://%s:%s" format(config["server"], config["port"]))
+        net connect(config["server"], config["port"] toInt())
 
         loop = FixedLoop new(dye, 60)
         loop run(||
