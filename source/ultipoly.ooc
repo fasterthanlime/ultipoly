@@ -18,7 +18,7 @@ import os/Time
 
 // ours
 use ultipoly-server
-import ulti/[base, board, net]
+import ulti/[base, board, clientnet]
 
 import poly/[pboard]
 
@@ -79,7 +79,6 @@ Client: class extends Base {
         dialog := InputDialog new(frame, "Nickname", |message|
             logger info("Joining with nick '%s'", message)
             net join(message)
-            joined()
         )
         frame push(dialog)
 
@@ -87,7 +86,7 @@ Client: class extends Base {
 
         loadUI()
 
-        net = ClientNet new()
+        net = ClientNetImpl new(this)
         net connect("tcp://%s:%s" format(config["server"], config["port"]))
 
         loop = FixedLoop new(dye, 60)
@@ -97,9 +96,7 @@ Client: class extends Base {
         )
     }
 
-    joined: func {
-        board = Board new()
-        board classicSetup()
+    joined: func (=board) {
         pboard = PBoard new(board)
         scene add(pboard)
 
@@ -149,5 +146,21 @@ Client: class extends Base {
 ClientState: enum {
     WAITING
     IN_GAME
+}
+
+ClientNetImpl: class extends ClientNet {
+
+    client: Client
+
+    init: func (=client) {
+        super()
+    }
+
+    onBoard: func (board: Board) {
+        logger warn("Received board! here it is:")
+        board print()
+        client joined(board)
+    }
+
 }
 
