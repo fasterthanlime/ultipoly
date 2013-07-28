@@ -19,11 +19,13 @@ import structs/[ArrayList]
 use ultipoly-server
 import ulti/[base, board]
 
+import poly/[pboard]
+
 main: func (args: ArrayList<String>) {
-    Game new()
+    Client new()
 }
 
-Game: class extends Base {
+Client: class extends Base {
 
     dye: DyeContext
     input: Input
@@ -54,10 +56,14 @@ Game: class extends Base {
 
         loop = FixedLoop new(dye, 30)
 
-        dialog := InputDialog new(frame, "Game name", |message|
+        dialog := InputDialog new(frame, "Nickname", |message|
             logger info("Got message: %s", message)
         )
         frame push(dialog)
+
+        board := Board new()
+        pboard := PBoard new(board)
+        scene add(pboard)
 
         loop run(||
             frame update()
