@@ -14,6 +14,7 @@ import gnaar/[ui, ui-loader, dialogs]
 
 // sdk
 import structs/[ArrayList]
+import os/Time
 
 // ours
 use ultipoly-server
@@ -35,6 +36,11 @@ Client: class extends Base {
     frame: Frame
 
     player: Player
+    board: Board
+    pboard: PBoard
+
+    // temp code
+    steps := 0
 
     init: func {
         super()
@@ -57,6 +63,8 @@ Client: class extends Base {
         scene = dye getScene()
         frame = Frame new(scene)
 
+        setupEvents()
+
         loop = FixedLoop new(dye, 30)
 
         /*
@@ -70,26 +78,46 @@ Client: class extends Base {
 
         uiLoader := UILoader new(UIFactory new())
         uiLoader load(frame, "assets/ui/main.yml")
+        time := frame find("time", Label)
+        money := frame find("money", Label)
         
         right := frame find("right", Panel)
         uiLoader load(right, "assets/ui/street.yml")
 
-        board := Board new()
-        pboard := PBoard new(board)
+        board = Board new()
+        pboard = PBoard new(board)
         scene add(pboard)
 
         unit := board createUnit(player)
         pboard addUnit(unit)
 
         loop run(||
+            time setValue("%d seconds" format(this steps))
+            money setValue("$%.0f" format(player balance))
+
             frame update()
             update()
         )
     }
 
+    advance: func {
+        steps += 1
+        for (unit in player units) {
+            unit step(1000)
+        }
+    }
+
     update: func {
+        pboard update()
+    }
+
+    setupEvents: func {
         input onKeyPress(KeyCode ESC, |kp|
             quit()
+        )
+
+        input onKeyPress(KeyCode SPACE, |kp|
+            advance()
         )
 
         input onExit(|| quit())

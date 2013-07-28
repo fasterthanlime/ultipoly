@@ -56,6 +56,16 @@ PBoard: class extends GlGroup {
         unitLayer add(punit)
     }
 
+    update: func {
+        for (ptile in ptiles) {
+            ptile update()
+        }
+
+        for (punit in punits) {
+            punit update()
+        }
+    }
+
 }
 
 PTile: class extends GlGroup {
@@ -98,6 +108,9 @@ PTile: class extends GlGroup {
         add(label)
     }
 
+    update: func {
+    }
+
 }
 
 PUnit: class extends GlGroup {
@@ -114,6 +127,11 @@ PUnit: class extends GlGroup {
 
         add(sprite)
         pos set!(pboard getTilePos(unit tileIndex) add(offset))
+    }
+
+    update: func {
+        target := pboard getTilePos(unit tileIndex) add(offset) 
+        pos interpolate!(target, 0.1)
     }
 
 }

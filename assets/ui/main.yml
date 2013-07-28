@@ -26,6 +26,12 @@ topbar(panel):
             display: block
             margin: [0, 10]
 
+        time(label):
+            value: "Time: 0s"
+            font-size: 24
+            display: block
+            margin: [0, 10]
+
     right(panel):
         display: inline-block
         width: 60%
