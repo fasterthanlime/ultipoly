@@ -69,16 +69,10 @@ Client: class extends Base {
         player = Player new("me")
 
         uiLoader := UILoader new(UIFactory new())
-        uiLoader load(frame, "assets/ui/topbar.yml")
+        uiLoader load(frame, "assets/ui/main.yml")
         
-        /*
-        panel := Panel new()
-        panel width = SizeFlavor PERCENTAGE
-        panel height = SizeFlavor PERCENTAGE
-        panel givenSize set!(100, 50)
-        panel setBackgroundColor(Color new(128, 0, 0)) 
-        frame add(panel)
-        */
+        right := frame find("right", Panel)
+        uiLoader load(right, "assets/ui/street.yml")
 
         board := Board new()
         pboard := PBoard new(board)

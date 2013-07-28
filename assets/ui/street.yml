@@ -1,0 +1,15 @@
+street(panel):
+    name(label):
+        value: "Some street"
+        display: block
+        font-size: 34
+    
+    price(label):
+        value: "Price: $67"
+        display: block
+        font-size: 22
+    
+    group(label):
+        value: "Group: brown"
+        display: block
+        font-size: 22

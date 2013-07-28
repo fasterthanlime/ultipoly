@@ -1,0 +1,34 @@
+topbar(panel):
+    width: 100%
+    height: 200
+    background: [30, 30, 30]
+
+    left(panel):
+        margin: [20, 0]
+        display: inline-block
+        width: 30%
+        height: 100%
+
+        title(label):
+            value: Ultipoly
+            font-size: 55
+            display: block
+
+        playerName(label):
+            value: Player
+            font-size: 24
+            display: block
+            margin: [0, 10]
+
+        money(label):
+            value: $1500
+            font-size: 24
+            display: block
+            margin: [0, 10]
+
+    right(panel):
+        display: inline-block
+        width: 70%
+        height: 100%
+        background: [10, 10, 10]
+        margin: [20, 0]
