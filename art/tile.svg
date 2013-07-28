@@ -14,7 +14,10 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="New document 1">
+   sodipodi:docname="tile.svg"
+   inkscape:export-filename="/home/amos/Dev/ultipoly/assets/tile.png"
+   inkscape:export-xdpi="89.959999"
+   inkscape:export-ydpi="89.959999">
   <defs
      id="defs4" />
   <sodipodi:namedview
@@ -69,22 +72,35 @@
      transform="translate(-94.968731,-106.8728)">
     <rect
        style="fill:#e8e8e8;fill-opacity:1;stroke:none"
+       id="rect3759-5"
+       width="290.41885"
+       height="294.96454"
+       x="97.07872"
+       y="178.12592" />
+    <rect
+       style="fill:#e8e8e8;fill-opacity:1;stroke:none"
        id="rect3759"
        width="290.41885"
        height="68.185295"
        x="97.479721"
        y="109.38478" />
-    <rect
-       style="fill:none;stroke:#000000;stroke-width:4;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       id="rect2985"
-       width="290.92392"
-       height="363.65491"
-       x="96.974648"
-       y="108.87971" />
-    <path
-       style="fill:none;stroke:#000000;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m 97.857143,177.36218 289.999997,0 0,-1.42857"
-       id="path3755"
-       inkscape:connector-curvature="0" />
+    <g
+       id="g3782"
+       inkscape:export-filename="/home/amos/Dev/ultipoly/assets/tile-outline.png"
+       inkscape:export-xdpi="89.959999"
+       inkscape:export-ydpi="89.959999">
+      <rect
+         y="108.87971"
+         x="96.974648"
+         height="363.65491"
+         width="290.92392"
+         id="rect2985"
+         style="fill:none;stroke:#000000;stroke-width:4;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <path
+         inkscape:connector-curvature="0"
+         id="path3755"
+         d="m 97.857143,177.36218 289.999997,0 0,-1.42857"
+         style="fill:none;stroke:#000000;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+    </g>
   </g>
 </svg>
