@@ -24,6 +24,8 @@ PBoard: class extends GlGroup {
     ptiles := ArrayList<PTile> new()
     punits := ArrayList<PUnit> new()
 
+    unitSelected: PUnit
+
     init: func (=board) {
         //add(GlText new(FONT_PATH, "%d tiles missing here." format(board tiles size)))
         tileLayer = GlGroup new()
@@ -54,6 +56,15 @@ PBoard: class extends GlGroup {
         punit := PUnit new(this, unit)
         punits add(punit)
         unitLayer add(punit)
+        selectUnit(punit)
+    }
+
+    selectUnit: func (target: PUnit) {
+        for (punit in punits) {
+            punit selected = false
+        }
+        unitSelected = target
+        target selected = true
     }
 
     update: func {
@@ -63,6 +74,11 @@ PBoard: class extends GlGroup {
 
         for (punit in punits) {
             punit update()
+        }
+
+        if (unitSelected) {
+            idealCamPos := vec2(240 - unitSelected pos x, unitSelected pos y - 250)
+            pos interpolate!(idealCamPos, 0.1)
         }
     }
 
@@ -117,6 +133,7 @@ PUnit: class extends GlGroup {
 
     unit: Unit
     pboard: PBoard
+    selected := false
 
     offset := static vec2(60, 60)
 
@@ -131,7 +148,7 @@ PUnit: class extends GlGroup {
 
     update: func {
         target := pboard getTilePos(unit tileIndex) add(offset) 
-        pos interpolate!(target, 0.1)
+        pos interpolate!(target, 0.07)
     }
 
 }

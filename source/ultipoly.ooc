@@ -65,7 +65,7 @@ Client: class extends Base {
 
         setupEvents()
 
-        loop = FixedLoop new(dye, 30)
+        loop = FixedLoop new(dye, 60)
 
         /*
         dialog := InputDialog new(frame, "Nickname", |message|
