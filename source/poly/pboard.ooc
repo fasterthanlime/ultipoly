@@ -1,7 +1,7 @@
 
 // third-party
 use dye
-import dye/[core, primitives, sprite, text]
+import dye/[core, primitives, sprite, text, math]
 
 // ours
 use ultipoly-server
@@ -18,25 +18,42 @@ PBoard: class extends GlGroup {
     FONT_PATH := static "assets/ttf/font.ttf"
 
     board: Board
+
+    tileLayer, unitLayer: GlGroup
+
     ptiles := ArrayList<PTile> new()
+    punits := ArrayList<PUnit> new()
 
     init: func (=board) {
         //add(GlText new(FONT_PATH, "%d tiles missing here." format(board tiles size)))
+        tileLayer = GlGroup new()
+        add(tileLayer)
 
-        x := 100
-        y := 100
+        unitLayer = GlGroup new()
+        add(unitLayer)
 
+        i := 0
         for (tile in board tiles) {
-            ptile := PTile new(tile)
-            ptile pos set!(x, y)
-            addTile(ptile)
-            x += 120
+            addTile(tile, i)
+            i += 1
         }
     }
 
-    addTile: func (ptile: PTile) {
+    getTilePos: func (tileIndex: Int) -> Vec2 {
+        vec2(100 + tileIndex * 120, 200)
+    }
+
+    addTile: func (tile: Tile, tileIndex: Int) {
+        ptile := PTile new(tile)
+        ptile pos set!(getTilePos(tileIndex))
         ptiles add(ptile)
-        add(ptile)
+        tileLayer add(ptile)
+    }
+
+    addUnit: func (unit: Unit) {
+        punit := PUnit new(this, unit)
+        punits add(punit)
+        unitLayer add(punit)
     }
 
 }
@@ -79,6 +96,24 @@ PTile: class extends GlGroup {
         label pos set!(5, 5)
         label color set!(25, 25, 25)
         add(label)
+    }
+
+}
+
+PUnit: class extends GlGroup {
+
+    unit: Unit
+    pboard: PBoard
+
+    offset := static vec2(60, 60)
+
+    init: func (=pboard, =unit) {
+        sprite := GlSprite new("assets/png/astronaut.png")
+        factor := 0.2
+        sprite scale set!(factor, factor)
+
+        add(sprite)
+        pos set!(pboard getTilePos(unit tileIndex) add(offset))
     }
 
 }

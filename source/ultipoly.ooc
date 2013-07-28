@@ -78,6 +78,9 @@ Client: class extends Base {
         pboard := PBoard new(board)
         scene add(pboard)
 
+        unit := board createUnit(player)
+        pboard addUnit(unit)
+
         loop run(||
             frame update()
             update()
