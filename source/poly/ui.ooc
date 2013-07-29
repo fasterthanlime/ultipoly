@@ -29,6 +29,7 @@ ClientUI: class {
     frame: Frame
     right: Panel
     time, money, playerName: Label
+    streetName, streetPrice, streetGroup: Label
 
     init: func (=game, =scene) {
         frame = Frame new(scene)
@@ -44,6 +45,10 @@ ClientUI: class {
         
         right = frame find("right", Panel)
         uiLoader load(right, "assets/ui/street.yml")
+
+        streetName = frame find("name", Label)
+        streetPrice = frame find("price", Label)
+        streetGroup = frame find("group", Label)
     }
 
     update: func {
@@ -64,6 +69,19 @@ ClientUI: class {
     askNick: func (f: Func (String)) {
         dialog := InputDialog new(frame, "Enter nickname", |s| f(s))
         frame push(dialog)
+    }
+
+    setTileInfo: func (tile: Tile) {
+        match (tile) {
+            case street: Street =>
+                streetName setValue("Street")
+                streetPrice setValue("Price: $%.0f" format(street price))
+                streetGroup setValue("Group: %s" format(street group name))
+            case =>
+                streetName setValue(tile toString() capitalize())
+                streetPrice setValue("")
+                streetGroup setValue("")
+        }
     }
 
 }

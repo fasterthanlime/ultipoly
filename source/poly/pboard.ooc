@@ -87,6 +87,11 @@ PBoard: class extends GlGroup {
         if (unitSelected) {
             idealCamPos := vec2(240 - unitSelected pos x, unitSelected pos y - 250)
             pos interpolate!(idealCamPos, 0.1)
+
+            tile := board getTile(unitSelected unit tileIndex)
+            if (tile) {
+                ui setTileInfo(tile)
+            }
         }
     }
 

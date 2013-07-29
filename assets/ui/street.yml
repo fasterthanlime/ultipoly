@@ -1,15 +1,15 @@
 street(panel):
     name(label):
-        value: "Some street"
+        value: ""
         display: block
         font-size: 34
     
     price(label):
-        value: "Price: $67"
+        value: ""
         display: block
         font-size: 22
     
     group(label):
-        value: "Group: brown"
+        value: ""
         display: block
         font-size: 22
