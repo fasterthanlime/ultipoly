@@ -18,7 +18,7 @@ import os/Time
 
 // ours
 use ultipoly-server
-import ulti/[base, board, clientnet]
+import ulti/[base, board, clientnet, zbag]
 
 import poly/[pboard]
 
@@ -103,6 +103,7 @@ ClientGame: class {
 
     start: func {
         state = ClientState IN_GAME
+        logger info("Game started!")
     }
 
     loadUI: func {
@@ -117,6 +118,7 @@ ClientGame: class {
     }
 
     update: func {
+        delta := 60.0 / 1000.0
         net update()
 
         match state {
@@ -174,12 +176,23 @@ ClientNetImpl: class extends ClientNet {
 
     onNewUnit: func (playerName, hash: String) {
         player := client players get(playerName)
-        unit := client board addUnit(player, hash)
-        client pboard addUnit(unit)
+        unit  := client board addUnit(player, hash)
+        punit := client pboard addUnit(unit)
+        if (playerName == client nick) {
+            client pboard selectUnit(punit)
+        } else {
+            logger info("new unit isn't ours, ignoring... (%s vs %s)", playerName, client nick)
+        }
     }
 
     start: func {
         client start()
+    }
+
+    unitEvent: func (bag: ZBag) {
+        hash := bag pull()
+        unit := client board units get(hash)
+        unit applyEvent(bag)
     }
 
 }

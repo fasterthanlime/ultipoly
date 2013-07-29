@@ -3,12 +3,15 @@
 use dye
 import dye/[core, primitives, sprite, text, math]
 
+use deadlogger
+import deadlogger/[Log, Logger]
+
 // ours
 use ultipoly-server
 import ulti/[board]
 
 // sdk
-import structs/[ArrayList]
+import structs/[ArrayList, HashMap]
 
 /**
  * Displays the board
@@ -22,9 +25,11 @@ PBoard: class extends GlGroup {
     tileLayer, unitLayer: GlGroup
 
     ptiles := ArrayList<PTile> new()
-    punits := ArrayList<PUnit> new()
+    punits := HashMap<String, PUnit> new()
 
     unitSelected: PUnit
+
+    logger := Log getLogger(This name)
 
     init: func (=board) {
         //add(GlText new(FONT_PATH, "%d tiles missing here." format(board tiles size)))
@@ -52,14 +57,15 @@ PBoard: class extends GlGroup {
         tileLayer add(ptile)
     }
 
-    addUnit: func (unit: Unit) {
+    addUnit: func (unit: Unit) -> PUnit {
         punit := PUnit new(this, unit)
-        punits add(punit)
+        punits put(unit hash, punit)
         unitLayer add(punit)
-        selectUnit(punit)
+        punit
     }
 
     selectUnit: func (target: PUnit) {
+        logger info("Selected unit: %s", target unit hash)
         for (punit in punits) {
             punit selected = false
         }
