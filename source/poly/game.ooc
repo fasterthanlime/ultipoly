@@ -101,18 +101,7 @@ ClientGame: class {
         scene add(pboard)
     }
 
-    onNewPlayer: func (name: String) {
-        newPlayer := Player new(name)
-        players put(newPlayer name, newPlayer)
-        logger info("Joined the party: %s", newPlayer name)
-
-        if (name == nick) {
-            logger info("Found ourselves!")
-            player = newPlayer
-        }
-    }
-
-    ready: func {
+    start: func {
         state = ClientState IN_GAME
     }
 
@@ -173,10 +162,24 @@ ClientNetImpl: class extends ClientNet {
     }
 
     onNewPlayer: func (name: String) {
-        client onNewPlayer(name)
+        newPlayer := Player new(name)
+        client players put(newPlayer name, newPlayer)
+        logger info("Joined the party: %s", newPlayer name)
+
+        if (name == client nick) {
+            logger info("Found ourselves!")
+            client player = newPlayer
+        }
     }
 
-    onNewUnit: func {
+    onNewUnit: func (playerName, hash: String) {
+        player := client players get(playerName)
+        unit := client board addUnit(player, hash)
+        client pboard addUnit(unit)
+    }
+
+    start: func {
+        client start()
     }
 
 }
