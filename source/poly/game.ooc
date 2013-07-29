@@ -175,5 +175,11 @@ ClientNetImpl: class extends ClientNet {
         unit applyEvent(bag)
     }
 
+    playerEvent: func (bag: ZBag) {
+        name := bag pull()
+        player := client players get(name)
+        player applyEvent(bag)
+    }
+
 }
 
