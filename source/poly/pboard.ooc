@@ -9,6 +9,7 @@ import deadlogger/[Log, Logger]
 // ours
 use ultipoly-server
 import ulti/[board]
+import poly/[ui]
 
 // sdk
 import structs/[ArrayList, HashMap]
@@ -31,8 +32,9 @@ PBoard: class extends GlGroup {
 
     logger := Log getLogger(This name)
 
-    init: func (=board) {
-        //add(GlText new(FONT_PATH, "%d tiles missing here." format(board tiles size)))
+    ui: ClientUI
+
+    init: func (=ui, =board) {
         tileLayer = GlGroup new()
         add(tileLayer)
 

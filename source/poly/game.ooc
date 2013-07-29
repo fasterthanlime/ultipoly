@@ -20,7 +20,7 @@ import os/Time
 use ultipoly-server
 import ulti/[base, board, clientnet, zbag]
 
-import poly/[pboard]
+import poly/[pboard, ui]
 
 ClientGame: class {
 
@@ -35,15 +35,11 @@ ClientGame: class {
 
     logger := static Log getLogger(This name)
 
-    // temp code
-    steps := 0
-
-    // ui
-    frame: Frame
-    time, money: Label
-
     // net
     net: ClientNet
+
+    // ui
+    ui: ClientUI
 
     // state
     state := ClientState WAITING
@@ -70,18 +66,14 @@ ClientGame: class {
         input = dye input
         scene = dye getScene()
 
-        frame = Frame new(scene)
-
         setupEvents()
 
-        dialog := InputDialog new(frame, "Nickname", |message|
+        ui = ClientUI new(this, scene)
+        ui askNick(|message|
             nick = message
             logger info("Joining with nick '%s'", nick)
             net join(nick)
         )
-        frame push(dialog)
-
-        loadUI()
 
         net = ClientNetImpl new(this)
         net connect(config["server"], config["port"] toInt())
@@ -91,30 +83,20 @@ ClientGame: class {
 
     run: func {
         loop run(||
-            frame update()
+            ui update()
             update()
         )
     }
 
     onBoard: func (=board) {
-        pboard = PBoard new(board)
+        pboard = PBoard new(ui, board)
         scene add(pboard)
     }
 
     start: func {
         state = ClientState IN_GAME
+        ui playerName setValue("Player: %s" format(player name))
         logger info("Game started!")
-    }
-
-    loadUI: func {
-        uiLoader := UILoader new(UIFactory new())
-        uiLoader load(frame, "assets/ui/main.yml")
-        time = frame find("time", Label)
-        money = frame find("money", Label)
-        
-        right := frame find("right", Panel)
-        uiLoader load(right, "assets/ui/street.yml")
-
     }
 
     update: func {
@@ -124,8 +106,6 @@ ClientGame: class {
         match state {
             case ClientState IN_GAME =>
                 pboard update()
-                time setValue("%d seconds" format(this steps))
-                money setValue("$%.0f" format(player balance))
         }
     }
 
