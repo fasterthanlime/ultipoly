@@ -151,7 +151,7 @@ PUnit: class extends GlGroup {
     offset := static vec2(60, 60)
 
     init: func (=pboard, =unit) {
-        sprite := GlSprite new("assets/png/astronaut.png")
+        sprite := GlSprite new("assets/png/player-%s.png" format(unit player avatar))
         factor := 0.2
         sprite scale set!(factor, factor)
 

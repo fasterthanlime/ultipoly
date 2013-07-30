@@ -155,8 +155,8 @@ ClientNetImpl: class extends ClientNet {
         client onBoard(board)
     }
 
-    onNewPlayer: func (name: String) {
-        newPlayer := Player new(name)
+    onNewPlayer: func (name, avatar: String) {
+        newPlayer := Player new(name, avatar)
         client players put(newPlayer name, newPlayer)
         logger info("Joined the party: %s", newPlayer name)
 
