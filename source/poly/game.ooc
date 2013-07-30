@@ -106,7 +106,6 @@ ClientGame: class {
 
         match state {
             case ClientState IN_GAME =>
-                logger info("Got %d units to fakestep(%.2f) for %s", player units size, delta, player name)
                 for (unit in player units) {
                     unit fakeStep(delta)
                 }
@@ -202,8 +201,12 @@ ClientNetImpl: class extends ClientNet {
 
     tileBought: func (name: String, tileIndex: Int) {
         tile := client board getTile(tileIndex)
-        player = client players get(name)
+        player := client players get(name)
         tile owner = player
+    }
+
+    keepalive: func {
+        send(ZBag make("keepalive", client player name))
     }
 
 }
