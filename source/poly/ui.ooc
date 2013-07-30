@@ -29,6 +29,7 @@ ClientUI: class {
     frame: Frame
     right: Panel
     time, money, playerName: Label
+    playerAvatar: Icon
     streetName, streetPrice, streetGroup, streetOwner: Label
 
     init: func (=game, =scene) {
@@ -42,6 +43,7 @@ ClientUI: class {
         time = frame find("time", Label)
         money = frame find("money", Label)
         playerName = frame find("playerName", Label)
+        playerAvatar = frame find("playerAvatar", Icon)
         
         right = frame find("right", Panel)
         uiLoader load(right, "assets/ui/street.yml")
@@ -57,11 +59,11 @@ ClientUI: class {
 
         match (game state) {
             case ClientState WAITING =>
-                time setValue("Joining...")
-                money setValue(game net hostname)
+                time setValue(game net hostname)
+                money setValue("")
             case ClientState IN_GAME =>
-                time setValue("In game")
-                money setValue("$%.0f" format(game player balance))
+                time setValue("")
+                money setValue(" | $%.0f" format(game player balance))
         }
     }
 

@@ -95,7 +95,8 @@ ClientGame: class {
 
     start: func {
         state = ClientState IN_GAME
-        ui playerName setValue("Player: %s" format(player name))
+        ui playerName setValue(player name)
+        ui playerAvatar src = "assets/png/player-%s.png" format(player avatar)
         logger info("Game started!")
     }
 
