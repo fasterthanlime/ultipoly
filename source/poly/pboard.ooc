@@ -163,19 +163,33 @@ PUnit: class extends GlGroup {
         pos set!(pboard getTilePos(unit tileIndex) add(offset))
 
         timeout = GlText new(PBoard FONT_PATH, "0s", 18)
-        timeout color set!(128, 128, 128)
-        timeout pos set!(30, -50)
+        timeout color set!(20, 20, 20)
+        timeout pos set!(-40, 40)
         add(timeout)
     }
 
     update: func {
-        target := pboard getTilePos(unit tileIndex) add(offset) 
-        pos interpolate!(target, 0.15)
+        if (!unit action) return
 
-        if (unit action) {
-            seconds := unit action timeout / 1000.0
-            timeout value = "%.1fs" format(seconds)
+        match (unit action type) {
+            case ActionType MOVE =>
+                target := getTarget(unit action number)
+
+                if (target x < pos x) {
+                    pos x = 0
+                }
+                pos interpolate!(target, 0.15)
+            case =>
+                target := getTarget(unit tileIndex)
+                pos set!(target)
         }
+
+        seconds := unit action timeout / 1000.0
+        timeout value = "%s | %.1fs" format(unit action type toString(), seconds)
+    }
+
+    getTarget: func (tileIndex: Int) -> Vec2 {
+        pboard getTilePos(tileIndex) add(offset) 
     }
 
 }
