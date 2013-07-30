@@ -13,3 +13,8 @@ street(panel):
         value: ""
         display: block
         font-size: 22
+
+    owner(label):
+        value: ""
+        display: block
+        font-size: 22

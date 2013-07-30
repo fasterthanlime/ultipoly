@@ -29,7 +29,7 @@ ClientUI: class {
     frame: Frame
     right: Panel
     time, money, playerName: Label
-    streetName, streetPrice, streetGroup: Label
+    streetName, streetPrice, streetGroup, streetOwner: Label
 
     init: func (=game, =scene) {
         frame = Frame new(scene)
@@ -49,6 +49,7 @@ ClientUI: class {
         streetName = frame find("name", Label)
         streetPrice = frame find("price", Label)
         streetGroup = frame find("group", Label)
+        streetOwner = frame find("owner", Label)
     }
 
     update: func {
@@ -77,10 +78,16 @@ ClientUI: class {
                 streetName setValue("Street")
                 streetPrice setValue("Price: $%.0f" format(street price))
                 streetGroup setValue("Group: %s" format(street group name))
+                if (street owner) {
+                    streetOwner setValue("Owned by: %s" format(street owner name))
+                } else {
+                    streetOwner setValue("FOR SALE!")
+                }
             case =>
                 streetName setValue(tile toString() capitalize())
-                streetPrice setValue("")
-                streetGroup setValue("")
+                streetPrice setValue(" ")
+                streetGroup setValue(" ")
+                streetOwner setValue(" ")
         }
     }
 

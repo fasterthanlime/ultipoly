@@ -110,11 +110,23 @@ ClientGame: class {
     }
 
     setupEvents: func {
+        input onKeyPress(KeyCode B, |kp|
+            tryBuy()
+        )
+
         input onKeyPress(KeyCode ESC, |kp|
             quit()
         )
 
         input onExit(|| quit())
+    }
+
+    tryBuy: func {
+        if (state != ClientState IN_GAME) return
+
+        if (pboard unitSelected) {
+            net tryBuy(pboard unitSelected unit tileIndex)
+        }
     }
 
     quit: func {
@@ -179,6 +191,12 @@ ClientNetImpl: class extends ClientNet {
         name := bag pull()
         player := client players get(name)
         player applyEvent(bag)
+    }
+
+    tileBought: func (name: String, tileIndex: Int) {
+        tile := client board getTile(tileIndex)
+        player = client players get(name)
+        tile owner = player
     }
 
 }
