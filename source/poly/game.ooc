@@ -101,11 +101,16 @@ ClientGame: class {
     }
 
     update: func {
-        delta := 60.0 / 1000.0
+        delta := 1000.0 / 60.0
         net update()
 
         match state {
             case ClientState IN_GAME =>
+                logger info("Got %d units to fakestep(%.2f) for %s", player units size, delta, player name)
+                for (unit in player units) {
+                    unit fakeStep(delta)
+                }
+
                 pboard update()
         }
     }
@@ -171,6 +176,7 @@ ClientNetImpl: class extends ClientNet {
         player := client players get(playerName)
         unit  := client board addUnit(player, hash)
         punit := client pboard addUnit(unit)
+        player units add(unit)
         if (playerName == client nick) {
             client pboard selectUnit(punit)
         } else {

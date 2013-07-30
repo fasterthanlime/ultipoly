@@ -150,18 +150,32 @@ PUnit: class extends GlGroup {
 
     offset := static vec2(60, 60)
 
+    // graphicsy stuff
+    sprite: GlSprite
+    timeout: GlText
+
     init: func (=pboard, =unit) {
-        sprite := GlSprite new("assets/png/player-%s.png" format(unit player avatar))
+        sprite = GlSprite new("assets/png/player-%s.png" format(unit player avatar))
         factor := 0.2
         sprite scale set!(factor, factor)
 
         add(sprite)
         pos set!(pboard getTilePos(unit tileIndex) add(offset))
+
+        timeout = GlText new(PBoard FONT_PATH, "0s", 18)
+        timeout color set!(128, 128, 128)
+        timeout pos set!(30, -50)
+        add(timeout)
     }
 
     update: func {
         target := pboard getTilePos(unit tileIndex) add(offset) 
-        pos interpolate!(target, 0.07)
+        pos interpolate!(target, 0.15)
+
+        if (unit action) {
+            seconds := unit action timeout / 1000.0
+            timeout value = "%.1fs" format(seconds)
+        }
     }
 
 }
