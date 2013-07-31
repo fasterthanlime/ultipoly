@@ -104,6 +104,9 @@ PTile: class extends GlGroup {
     sprites: GlGroup
     bg, fg: GlSprite
 
+    ownerSprite: GlSprite
+    cachedOwner: Player
+
     init: func (=tile) {
         sprites = GlGroup new()
         factor := 0.4
@@ -135,9 +138,26 @@ PTile: class extends GlGroup {
         label pos set!(5, 5)
         label color set!(25, 25, 25)
         add(label)
+
+        ownerSprite = GlSprite new("")
+        ownerFactor := 0.093
+        ownerSprite scale set!(ownerFactor, ownerFactor)
+        ownerSprite pos set!(15, 133)
+        add(ownerSprite)
     }
 
     update: func {
+        if (cachedOwner != tile owner) {
+            cachedOwner = tile owner
+
+            if (cachedOwner) {
+                ownerSprite setTexture(avatarPath(cachedOwner))
+            }
+        }
+    }
+
+    avatarPath: func (player: Player) -> String {
+        "assets/png/player-%s.png" format(player avatar)
     }
 
 }
@@ -167,7 +187,7 @@ PUnit: class extends GlGroup {
 
         timeout = GlText new(PBoard FONT_PATH, "0s", 18)
         timeout color set!(20, 20, 20)
-        timeout pos set!(10, 30)
+        timeout pos set!(0, 25)
         add(timeout)
 
         for (i in 0..actionNames length) {
@@ -175,9 +195,9 @@ PUnit: class extends GlGroup {
             actionSprite center = false
             actions add(actionSprite)
         }
-        actionFactor := 0.5
+        actionFactor := 0.4
         actions scale set!(actionFactor, actionFactor)
-        actions pos set!(-30, 20)
+        actions pos set!(-28, 20)
         add(actions)
     }
 
