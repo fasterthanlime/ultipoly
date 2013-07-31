@@ -106,7 +106,7 @@ ClientGame: class {
 
         match state {
             case ClientState IN_GAME =>
-                for (unit in player units) {
+                for (p in players) for (unit in p units) {
                     unit fakeStep(delta)
                 }
 

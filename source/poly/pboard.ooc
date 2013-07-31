@@ -1,7 +1,7 @@
 
 // third-party
 use dye
-import dye/[core, primitives, sprite, text, math]
+import dye/[core, primitives, sprite, text, math, anim]
 
 use deadlogger
 import deadlogger/[Log, Logger]
@@ -151,6 +151,8 @@ PUnit: class extends GlGroup {
     offset := static vec2(60, 60)
 
     // graphicsy stuff
+    actionNames := ["buy", "build", "wait", "move", "prison", "auction"]
+    actions := GlSet new()
     sprite: GlSprite
     timeout: GlText
 
@@ -158,18 +160,32 @@ PUnit: class extends GlGroup {
         sprite = GlSprite new("assets/png/player-%s.png" format(unit player avatar))
         factor := 0.2
         sprite scale set!(factor, factor)
+        sprite pos set!(0, -10)
 
         add(sprite)
         pos set!(pboard getTilePos(unit tileIndex) add(offset))
 
         timeout = GlText new(PBoard FONT_PATH, "0s", 18)
         timeout color set!(20, 20, 20)
-        timeout pos set!(-40, 40)
+        timeout pos set!(10, 30)
         add(timeout)
+
+        for (i in 0..actionNames length) {
+            actionSprite := GlSprite new("assets/png/action-%s.png" format(actionNames[i]))
+            actionSprite center = false
+            actions add(actionSprite)
+        }
+        actionFactor := 0.5
+        actions scale set!(actionFactor, actionFactor)
+        actions pos set!(-30, 20)
+        add(actions)
     }
 
     update: func {
         if (!unit action) return
+
+        frameNo := unit action type toInt()
+        actions setFrame(frameNo)
 
         match (unit action type) {
             case ActionType MOVE =>
@@ -185,7 +201,7 @@ PUnit: class extends GlGroup {
         }
 
         seconds := unit action timeout / 1000.0
-        timeout value = "%s | %.1fs" format(unit action type toString(), seconds)
+        timeout value = "%.1fs" format(seconds)
     }
 
     getTarget: func (tileIndex: Int) -> Vec2 {
