@@ -27,10 +27,12 @@ ClientUI: class {
 
     // ui
     frame: Frame
-    right: Panel
+    right, main: Panel
     time, money, playerName: Label
     playerAvatar: Icon
     streetName, streetPrice, streetGroup, streetOwner: Label
+
+    uiLoader: UILoader
 
     init: func (=game, =scene) {
         frame = Frame new(scene)
@@ -38,12 +40,14 @@ ClientUI: class {
     }
 
     load: func {
-        uiLoader := UILoader new(UIFactory new())
+        uiLoader = UILoader new(UIFactory new())
         uiLoader load(frame, "assets/ui/main.yml")
         time = frame find("time", Label)
         money = frame find("money", Label)
         playerName = frame find("playerName", Label)
         playerAvatar = frame find("playerAvatar", Icon)
+        
+        main = frame find("main", Panel)
         
         right = frame find("right", Panel)
         uiLoader load(right, "assets/ui/street.yml")
@@ -72,6 +76,10 @@ ClientUI: class {
     askNick: func (f: Func (String)) {
         dialog := InputDialog new(frame, "Enter nickname", |s| f(s))
         frame push(dialog)
+    }
+
+    showLobby: func {
+        uiLoader load(main, "assets/ui/lobby.yml")
     }
 
     setTileInfo: func (tile: Tile) {

@@ -1,0 +1,11 @@
+lobby(panel):
+    instructions(label):
+        value: |
+            Welcome to Ultipoly!
+        
+            Join an existing game or create a new one.
+
+    join(button):
+        value: Join game
+    join(button):
+        value: Create game

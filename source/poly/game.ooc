@@ -71,12 +71,13 @@ ClientGame: class {
         ui = ClientUI new(this, scene)
         ui askNick(|message|
             nick = message
-            logger info("Joining with nick '%s'", nick)
-            net join(nick)
+            logger info("Player has chosen nick '%s'", nick)
+            ui showLobby()
         )
 
-        net = ClientNetImpl new(this)
-        net connect(config["server"], config["port"] toInt())
+        hostname := config["server"]
+        port := config["port"] toInt()
+        net = ClientNetImpl new(this, hostname, port)
 
         loop = FixedLoop new(dye, 60)
     }
@@ -150,8 +151,8 @@ ClientNetImpl: class extends ClientNet {
 
     client: ClientGame
 
-    init: func (=client) {
-        super()
+    init: func (=client, hostname: String, port: Int) {
+        super(hostname, port)
     }
 
     onBoard: func (board: Board) {

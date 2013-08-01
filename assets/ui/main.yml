@@ -43,3 +43,7 @@ topbar(panel):
         height: 100%
         background: [10, 10, 10]
         padding: [20, 0]
+
+main(panel):
+    width: 100%
+    height: 500
