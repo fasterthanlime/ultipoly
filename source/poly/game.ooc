@@ -75,11 +75,26 @@ ClientGame: class {
             ui showLobby()
         )
 
+        ui hose subscribe(|bag|
+            uiEvent(bag)
+        )
+
         hostname := config["server"]
         port := config["port"] toInt()
         net = ClientNetImpl new(this, hostname, port)
 
         loop = FixedLoop new(dye, 60)
+    }
+
+    uiEvent: func (bag: ZBag) {
+        message := bag pull()
+        match message {
+            case "join" =>
+                code := bag pull()
+                net joinGame(code)
+            case "create" =>
+                net createGame()
+        }
     }
 
     run: func {

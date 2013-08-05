@@ -14,7 +14,7 @@ import dye/[core, input, sprite, primitives, loop]
 import poly/[game]
 
 use ultipoly-server
-import ulti/[clientnet, board]
+import ulti/[clientnet, board, events, zbag]
 
 // sdk
 import structs/[ArrayList, HashMap]
@@ -33,6 +33,8 @@ ClientUI: class {
     streetName, streetPrice, streetGroup, streetOwner: Label
 
     uiLoader: UILoader
+
+    hose := Firehose new()
 
     init: func (=game, =scene) {
         frame = Frame new(scene)
@@ -56,6 +58,16 @@ ClientUI: class {
         streetPrice = frame find("price", Label)
         streetGroup = frame find("group", Label)
         streetOwner = frame find("owner", Label)
+
+        frame onAction("join", |a|
+            askCode(|code|
+                hose publish(ZBag make("join", code))
+            )
+        )
+
+        frame onAction("create", |a|
+            hose publish(ZBag make("create"))
+        )
     }
 
     update: func {
@@ -75,6 +87,11 @@ ClientUI: class {
 
     askNick: func (f: Func (String)) {
         dialog := InputDialog new(frame, "Enter nickname", |s| f(s))
+        frame push(dialog)
+    }
+
+    askCode: func (f: Func (String)) {
+        dialog := InputDialog new(frame, "Enter game code", |s| f(s))
         frame push(dialog)
     }
 
