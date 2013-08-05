@@ -1,11 +1,22 @@
 lobby(panel):
-    instructions(label):
-        value: |
-            Welcome to Ultipoly!
-        
-            Join an existing game or create a new one.
+    left(panel):
+      width: 50%
+      height: 100%
+      display: inline-block
+      instructions(label):
+          display: block
+          value: |
+              Welcome to Ultipoly!
+          
+              Join an existing game or create a new one.
 
-    join(button):
-        value: Join game
-    join(button):
-        value: Create game
+    right(panel):
+      width: 50%
+      height: 100%
+      display: inline-block
+      join(button):
+          value: Join game
+          display: block
+      create(button):
+          value: Create game
+          display: block
