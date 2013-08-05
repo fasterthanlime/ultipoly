@@ -32,7 +32,7 @@ topbar(panel):
             money(label):
                 font-size: 45
 
-        time(label):
+        server(label):
             font-size: 24
             display: block
             margin: [0, 10]
