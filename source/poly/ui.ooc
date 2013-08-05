@@ -99,6 +99,13 @@ ClientUI: class {
         uiLoader load(main, "assets/ui/lobby.yml")
     }
 
+    onConnected: func (name: String) {
+        main clear()
+        uiLoader load(main, "assets/ui/lobby2.yml")
+        
+        main find("gameName", Label) setValue(name)
+    }
+
     setTileInfo: func (tile: Tile) {
         match (tile) {
             case street: Street =>

@@ -44,6 +44,7 @@ ClientGame: class {
     // state
     state := ClientState WAITING
     nick: String
+    name: String // of the game
 
     player: Player
     players := HashMap<String, Player> new()
@@ -114,6 +115,10 @@ ClientGame: class {
         ui playerName setValue(player name)
         ui playerAvatar src = "assets/png/player-%s.png" format(player avatar)
         logger info("Game started!")
+    }
+
+    onConnected: func (name: String) {
+        ui onConnected(name)
     }
 
     update: func {
@@ -223,6 +228,10 @@ ClientNetImpl: class extends ClientNet {
 
     keepalive: func {
         send(ZBag make("keepalive", client player name))
+    }
+
+    onConnected: func (name: String) {
+        client onConnected(name)
     }
 
 }

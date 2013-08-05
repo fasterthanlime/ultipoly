@@ -1,0 +1,20 @@
+lobby(panel):
+    left(panel):
+      width: 50%
+      height: 100%
+      display: inline-block
+      joined(label):
+          value: "Joined game:"
+          display: block
+      gameName(label):
+          color: [128, 128, 196]
+          value: ""
+          display: block
+
+    right(panel):
+      width: 50%
+      height: 100%
+      display: inline-block
+      start(button):
+          value: Force start
+          display: block
