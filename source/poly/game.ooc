@@ -119,6 +119,7 @@ ClientGame: class {
 
     onConnected: func (name: String) {
         ui onConnected(name)
+        net join(nick)
     }
 
     update: func {
