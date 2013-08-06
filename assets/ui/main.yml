@@ -11,8 +11,8 @@ topbar(panel):
 
         title(icon):
             src: "assets/png/logo.png"
-            width: 240
-            height: 60
+            width: 250
+            height: 61
             display: block
             margin: [0, 10]
 
